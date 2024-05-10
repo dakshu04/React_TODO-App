@@ -3,11 +3,11 @@
 
 const express = require('express');
 const { createTodo,updateTodo } = require('./Types');
-const { TODO } = require('./db');
+const { todo } = require('./db');
 const app = express();
 
-app.use(express.json)
-const port = 3000
+app.use(express.json())
+const port = 3000;
 
 app.post('/todo', async (req, res) => {
     const createPayload = req.body; //bdoy me se jo request h
@@ -16,11 +16,11 @@ app.post('/todo', async (req, res) => {
     if(!parsedPayload.success) {
       res.status(411).json({
         msg:"You sent the wrong inputs"
-      })
+      });
       return;
     }
     //put it in mongodb
-    await TODO.create({
+    await todo.create({
       title: createPayload.title,
       description: createPayload.description,
       completed:false
@@ -31,14 +31,14 @@ app.post('/todo', async (req, res) => {
 })
 
 app.get('/todos', async (req, res) => {
-  const todos = await TODO.find({});
+  const todos = await todo.find({});
 
   res.json({
     todos
   })
 })
 
-app.put('/completed ', async (req, res) => {
+app.put('/completed', async (req, res) => {
     const updatePayload = req.body;
     const parsedPayload = createTodo.safeParse(updatePayload);
 
